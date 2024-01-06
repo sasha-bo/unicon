@@ -1,0 +1,21 @@
+{
+    "name": "unicon/unicon",
+    "version": "1.0",
+    "description": "Universal data convertor, mostly used for array to object mapping. Understands PhpDoc attributes.",
+    "type": "library",
+    "license": "GPL-2.0-only",
+    "autoload": {
+        "psr-4": {
+            "Unicon\\Unicon\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Sasha Bo"
+        }
+    ],
+    "require": {
+        "php": ">=8.2",
+        "phpstan/phpdoc-parser": "^1.23"
+    }
+}
