@@ -32,6 +32,51 @@ class BooleanConverter extends AbstractConverter
     }
 
     /**
+     * @param mixed $source
+     * @param string $type
+     * @param array<string|int> $path
+     * @return ConversionValue|AbstractError|null
+     */
+    protected function convertGently(mixed $source, string $type, array $path): null|ConversionValue|AbstractError
+    {
+        return match($source) {
+            '', 0, '0' => $this->validate(false, $source, $type, $path),
+            1, '1' => $this->validate(true, $source, $type, $path),
+            default => null
+        };
+    }
+
+    /**
+     * @param mixed $source
+     * @param string $type
+     * @param array<string|int> $path
+     * @return ConversionValue|AbstractError|null
+     */
+    protected function convertHumanly(mixed $source, string $type, array $path): null|ConversionValue|AbstractError
+    {
+        if (is_string($source)) {
+            return match(strtolower($source)) {
+                'false', 'no', 'f', 'n' => $this->validate(false, $source, $type, $path),
+                'true', 'yes', 't', 'y' => $this->validate(true, $source, $type, $path),
+                default => null
+            };
+        }
+
+        return null;
+    }
+
+    /**
+     * @param mixed $source
+     * @param string $type
+     * @param array<string|int> $path
+     * @return ConversionValue|AbstractError|null
+     */
+    protected function convertForcibly(mixed $source, string $type, array $path): null|ConversionValue|AbstractError
+    {
+        return $this->validate((bool) $source, $source, $type, $path);
+    }
+
+    /**
      * @param bool $value
      * @param mixed $source
      * @param string $type

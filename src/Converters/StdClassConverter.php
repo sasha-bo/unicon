@@ -4,7 +4,7 @@ namespace Unicon\Unicon\Converters;
 
 use Unicon\Unicon\ConversionValue;
 
-class ObjectConverter extends AbstractConverter
+class StdClassConverter extends AbstractConverter
 {
     /**
      * @param mixed $source
@@ -14,7 +14,7 @@ class ObjectConverter extends AbstractConverter
      */
     public function tryStrictMatch(mixed $source, string $type, array $path): ?ConversionValue
     {
-        return is_object($source) ? new ConversionValue($source) : null;
+        return $source instanceof \stdClass ? new ConversionValue($source) : null;
     }
     /**
      * @param mixed $source
@@ -25,9 +25,23 @@ class ObjectConverter extends AbstractConverter
     protected function convertGently(mixed $source, string $type, array $path): ?ConversionValue
     {
         if (is_array($source)) {
-            return new ConversionValue(StdClassConverter::fromArray($source));
+            return new ConversionValue(self::fromArray($source));
         }
 
         return null;
+    }
+
+    /**
+     * @param array<mixed> $source
+     * @return \stdClass
+     */
+    public static function fromArray(array $source): \stdClass
+    {
+        $object = new \stdClass();
+        foreach ($source as $key => $value) {
+            $object->$key = $value;
+        }
+
+        return $object;
     }
 }

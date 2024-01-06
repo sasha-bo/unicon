@@ -2,6 +2,7 @@
 
 namespace Unicon\Unicon\Converters;
 
+use SashaBo\Mapper\Value;
 use Unicon\Unicon\ConversionResult;
 use Unicon\Unicon\ConversionSettings;
 use Unicon\Unicon\ConversionValue;
@@ -32,6 +33,40 @@ class IntegerConverter extends AbstractConverter
     {
         return is_int($source) || is_float($source) && ceil($source) == floor($source)
             ? $this->validate((int) $source, $source, $type, $path) : null;
+    }
+
+    /**
+     * @param mixed $source
+     * @param string $type
+     * @param array<string|int> $path
+     * @return ConversionValue|AbstractError|null
+     */
+    protected function convertGently(mixed $source, string $type, array $path): null|ConversionValue|AbstractError
+    {
+        if (is_string($source)) {
+            if ($source == '') {
+                return $this->validate(0, $source, $type, $path);
+            }
+            if (preg_match('/^-?[0-9]+$/', $source)) {
+                return $this->validate((int) $source, $source, $type, $path);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param mixed $source
+     * @param string $type
+     * @param array<string|int> $path
+     * @return ConversionValue|AbstractError|null
+     */
+    protected function convertForcibly(mixed $source, string $type, array $path): null|ConversionValue|AbstractError
+    {
+        return
+            is_null($source) || is_scalar($source) || is_array($source)
+                ? $this->validate((int) $source, $source, $type, $path)
+                : null;
     }
 
     /**
