@@ -18,7 +18,6 @@ use Unicon\Unicon\Converters\ObjectConverter;
 use Unicon\Unicon\Converters\ResourceConverter;
 use Unicon\Unicon\Converters\ScalarConverter;
 use Unicon\Unicon\Converters\StringConverter;
-use Unicon\Unicon\Converters\UnsupportedConverter;
 use Unicon\Unicon\Converters\VoidConverter;
 
 class IdentifierConverterFactory

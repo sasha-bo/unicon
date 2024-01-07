@@ -2,9 +2,7 @@
 
 namespace Unicon\Unicon\Converters;
 
-use Unicon\Unicon\ConversionResult;
 use Unicon\Unicon\ConversionValue;
-use Unicon\Unicon\Errors\AbstractError;
 
 class CallableConverter extends AbstractConverter
 {

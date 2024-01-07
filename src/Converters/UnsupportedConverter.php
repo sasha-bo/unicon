@@ -2,14 +2,7 @@
 
 namespace Unicon\Unicon\Converters;
 
-use Unicon\Unicon\Constraints\AbstractConstraint;
-use Unicon\Unicon\ConversionResult;
-use Unicon\Unicon\ConversionSettings;
-use Unicon\Unicon\ConversionValue;
-use Unicon\Unicon\Errors\AbstractError;
-use Unicon\Unicon\Errors\ConversionErrorType;
 use Unicon\Unicon\Errors\UnsupportedError;
-use Unicon\Unicon\SignedConversionValue;
 
 class UnsupportedConverter extends AbstractConverter
 {

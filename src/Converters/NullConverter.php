@@ -2,11 +2,7 @@
 
 namespace Unicon\Unicon\Converters;
 
-use SashaBo\Mapper\Value;
-use Unicon\Unicon\ConversionResult;
 use Unicon\Unicon\ConversionValue;
-use Unicon\Unicon\Errors\AbstractError;
-use Unicon\Unicon\Errors\ConversionErrorType;
 
 class NullConverter extends AbstractConverter
 {

@@ -5,8 +5,8 @@ namespace Unicon\Unicon;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\ConstExprParser;
-use PHPStan\PhpDocParser\Parser\TypeParser as PHPStanTypeParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
+use PHPStan\PhpDocParser\Parser\TypeParser as PHPStanTypeParser;
 use Unicon\Unicon\ConverterFactories\PhpDoc\ConverterFactory as PhpDocConverterFactory;
 use Unicon\Unicon\Converters\AbstractConverter;
 

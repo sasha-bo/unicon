@@ -2,15 +2,12 @@
 
 namespace Unicon\Unicon\Converters;
 
-use SashaBo\Mapper\Value;
-use Unicon\Unicon\ConversionResult;
 use Unicon\Unicon\ConversionSettings;
 use Unicon\Unicon\ConversionValue;
 use Unicon\Unicon\Errors\AbstractError;
-use Unicon\Unicon\Errors\ConversionErrorType;
-use Unicon\Unicon\Errors\ZeroError;
 use Unicon\Unicon\Errors\TooLargeError;
 use Unicon\Unicon\Errors\TooSmallError;
+use Unicon\Unicon\Errors\ZeroError;
 
 class IntegerConverter extends AbstractConverter
 {

@@ -2,8 +2,6 @@
 
 namespace Unicon\Unicon;
 
-use Unicon\Unicon\Errors\ConversionErrorTranslatorInterface;
-use Unicon\Unicon\Errors\ConversionErrorTranslator;
 use Unicon\Unicon\FqnGenerator\FqnGenerator;
 use Unicon\Unicon\FqnGenerator\FqnGeneratorInterface;
 

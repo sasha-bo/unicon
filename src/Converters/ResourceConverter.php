@@ -2,7 +2,6 @@
 
 namespace Unicon\Unicon\Converters;
 
-use Unicon\Unicon\ConversionResult;
 use Unicon\Unicon\ConversionValue;
 
 class ResourceConverter extends AbstractConverter

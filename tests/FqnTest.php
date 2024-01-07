@@ -1,7 +1,6 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use SashaBo\Mapper\Mapper;
 use Unicon\Unicon\FqnGenerator\FqnGenerator;
 
 final class FqnTest extends TestCase

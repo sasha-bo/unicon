@@ -2,12 +2,7 @@
 
 namespace Unicon\Unicon\Converters;
 
-use Unicon\Unicon\ConversionResult;
 use Unicon\Unicon\ConversionSettings;
-use Unicon\Unicon\ConversionValue;
-use Unicon\Unicon\Errors\AbstractError;
-use Unicon\Unicon\Errors\DefaultError;
-use Unicon\Unicon\Errors\UnsupportedError;
 use Unicon\Unicon\Errors\VoidError;
 
 class VoidConverter extends AbstractConverter

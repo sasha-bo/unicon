@@ -1,10 +1,10 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Unicon\Unicon\ConverterFactory;
-use Unicon\Unicon\ConversionValue;
-use Unicon\Unicon\Errors\AbstractError;
 use Unicon\Unicon\ConversionSettings;
+use Unicon\Unicon\ConversionValue;
+use Unicon\Unicon\ConverterFactory;
+use Unicon\Unicon\Errors\AbstractError;
 
 final class TypesTest extends TestCase
 {

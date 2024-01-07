@@ -2,14 +2,10 @@
 
 namespace Unicon\Unicon\Converters;
 
-use Unicon\Unicon\ConversionResult;
 use Unicon\Unicon\ConversionSettings;
 use Unicon\Unicon\ConversionValue;
 use Unicon\Unicon\Errors\AbstractError;
-use Unicon\Unicon\Errors\TooLargeError;
-use Unicon\Unicon\Errors\TooSmallError;
 use Unicon\Unicon\Errors\TrueFalseError;
-use Unicon\Unicon\Errors\ZeroError;
 
 class BooleanConverter extends AbstractConverter
 {
