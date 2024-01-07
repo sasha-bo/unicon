@@ -23,7 +23,7 @@ class ObjectConverter extends AbstractConverter
     protected function convertGently(mixed $source, array $path): ?ConversionValue
     {
         if (is_array($source)) {
-            return new ConversionValue(StdClassConverter::fromArray($source));
+            return new ConversionValue((object) $source);
         }
 
         return null;

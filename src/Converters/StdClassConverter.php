@@ -23,23 +23,9 @@ class StdClassConverter extends AbstractConverter
     protected function convertGently(mixed $source, array $path): ?ConversionValue
     {
         if (is_array($source)) {
-            return new ConversionValue(self::fromArray($source));
+            return new ConversionValue((object) $source);
         }
 
         return null;
-    }
-
-    /**
-     * @param array<mixed> $source
-     * @return \stdClass
-     */
-    public static function fromArray(array $source): \stdClass
-    {
-        $object = new \stdClass();
-        foreach ($source as $key => $value) {
-            $object->$key = $value;
-        }
-
-        return $object;
     }
 }
