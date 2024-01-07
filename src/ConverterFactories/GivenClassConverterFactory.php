@@ -12,15 +12,14 @@ use Unicon\Unicon\Converters\StdClassConverter;
 
 class GivenClassConverterFactory
 {
-    /** @var array<string, string> */
-    private static array $converterClasses = [
+    private const CONVERTOR_CLASSES = [
         '\\stdClass' => StdClassConverter::class,
         '\\DateTime' => DateTimeConverter::class,
         '\\DateTimeImmutable' => DateTimeImmutableConverter::class,
         '\\DateTimeInterface' => DateTimeInterfaceConverter::class,
     ];
 
-    /** @var array<string, AbstractConverter> */
+    /** @var array<int, array<string, AbstractConverter>> */
     private static array $converters = [];
 
     public static function create(
@@ -28,19 +27,20 @@ class GivenClassConverterFactory
         string $class,
         string $contextClass = null
     ): AbstractConverter {
+        $settingsId = spl_object_id($settings);
         $classFqn = $settings->getFqnGenerator()->generate($class, $contextClass);
-        if (!isset(self::$converters[$classFqn])) {
-            if (isset(self::$converterClasses[$classFqn])) {
-                $converter = new self::$converterClasses[$classFqn]($settings, $classFqn);
+        if (!isset(self::$converters[$settingsId][$classFqn])) {
+            if (isset(self::CONVERTOR_CLASSES[$classFqn])) {
+                $converter = new (self::CONVERTOR_CLASSES[$classFqn])($settings, $classFqn);
                 if (!$converter instanceof AbstractConverter) {
                     throw new \Exception('Broken converter for '.$classFqn);
                 }
-                self::$converters[$classFqn] = $converter;
+                self::$converters[$settingsId][$classFqn] = $converter;
             } else {
-                self::$converters[$classFqn] = new GivenClassConverter($settings, $classFqn);
+                self::$converters[$settingsId][$classFqn] = new GivenClassConverter($settings, $classFqn);
             }
         }
 
-        return self::$converters[$classFqn];
+        return self::$converters[$settingsId][$classFqn];
     }
 }
