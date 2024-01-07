@@ -9,11 +9,10 @@ class MixedConverter extends AbstractConverter
 {
     /**
      * @param mixed $source
-     * @param string $type
      * @param array<string|int> $path
      * @return ConversionValue
      */
-    public function tryStrictMatch(mixed $source, string $type, array $path): ConversionValue
+    public function tryStrictMatch(mixed $source, array $path): ConversionValue
     {
         return new ConversionValue($source);
     }

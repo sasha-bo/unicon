@@ -1,11 +1,11 @@
 <?php
 
-namespace Unicon\Unicon\Converters;
+namespace Unicon\Unicon\Converters\DateTime;
 
-use Unicon\Unicon\ConversionResult;
 use Unicon\Unicon\ConversionValue;
+use Unicon\Unicon\Converters\AbstractConverter;
 
-class IterableConverter extends AbstractConverter
+class DateTimeInterfaceConverter extends AbstractConverter
 {
     /**
      * @param mixed $source
@@ -14,6 +14,6 @@ class IterableConverter extends AbstractConverter
      */
     public function tryStrictMatch(mixed $source, array $path): ?ConversionValue
     {
-        return is_iterable($source) ? new ConversionValue($source) : null;
+        return $source instanceof \DateTimeInterface ? new ConversionValue($source) : null;
     }
 }

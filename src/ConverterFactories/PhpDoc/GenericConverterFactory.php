@@ -45,17 +45,18 @@ class GenericConverterFactory
     ): AbstractConverter {
         $mainType = $phpstanType->type;
         return match($mainType->name) {
-            'int', 'integer' => self::createInteger($phpstanType->genericTypes, $settings),
-            default => new UnsupportedConverter($settings)
+            'int', 'integer' => self::createInteger($phpstanType->genericTypes, $phpDocType, $settings),
+            default => new UnsupportedConverter($settings, $phpDocType)
         };
     }
 
     /**
      * @param array<TypeNode> $genericTypes
+     * @param string $phpDocType
      * @param ConversionSettings $settings
      * @return AbstractConverter
      */
-    private static function createInteger(array $genericTypes, ConversionSettings $settings): AbstractConverter
+    private static function createInteger(array $genericTypes, string $phpDocType, ConversionSettings $settings): AbstractConverter
     {
         $parameters = [
             'min' => null,
@@ -71,6 +72,6 @@ class GenericConverterFactory
             }
         }
 
-        return new IntegerConverter($settings, ...$parameters);
+        return new IntegerConverter($settings, $phpDocType, ...$parameters);
     }
 }

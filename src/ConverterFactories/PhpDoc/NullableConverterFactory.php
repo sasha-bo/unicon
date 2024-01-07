@@ -40,8 +40,8 @@ class NullableConverterFactory
         string $selfClass = null
     ): AbstractConverter {
         return new UnionConverter([
-            new NullConverter($settings),
-            ConverterFactory::create($phpstanType->type, $settings, $phpDocType, $selfClass)
-        ], $settings);
+            ConverterFactory::create($phpstanType->type, $settings, $phpDocType, $selfClass),
+            new NullConverter($settings, $phpDocType)
+        ], $settings, $phpDocType);
     }
 }

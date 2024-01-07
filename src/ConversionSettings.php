@@ -4,12 +4,15 @@ namespace Unicon\Unicon;
 
 use Unicon\Unicon\Errors\ConversionErrorTranslatorInterface;
 use Unicon\Unicon\Errors\ConversionErrorTranslator;
+use Unicon\Unicon\FqnGenerator\FqnGenerator;
+use Unicon\Unicon\FqnGenerator\FqnGeneratorInterface;
 
 class ConversionSettings
 {
     private bool $humanConversionAllowed = false;
     private bool $forcedConversionAllowed = false;
     private string $dateToStringFormat = 'Y-m-d H:i:s';
+    private FqnGeneratorInterface $fqnGenerator;
 
     public function isHumanConversionAllowed(): bool
     {
@@ -24,6 +27,14 @@ class ConversionSettings
     public function getDateToStringFormat(): string
     {
         return $this->dateToStringFormat;
+    }
+
+    public function getFqnGenerator(): FqnGeneratorInterface
+    {
+        if (!isset($this->fqnGenerator)) {
+            $this->fqnGenerator = new FqnGenerator();
+        }
+        return $this->fqnGenerator;
     }
 
     public function allowHumanConversion(bool $value = true): static
@@ -43,6 +54,13 @@ class ConversionSettings
     public function setDateToStringFormat(string $format): static
     {
         $this->dateToStringFormat = $format;
+
+        return $this;
+    }
+
+    public function setFqnGenerator(FqnGeneratorInterface $fqnGenerator): static
+    {
+        $this->fqnGenerator = $fqnGenerator;
 
         return $this;
     }

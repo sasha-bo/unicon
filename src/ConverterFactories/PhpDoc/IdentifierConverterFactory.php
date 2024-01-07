@@ -3,20 +3,12 @@
 namespace Unicon\Unicon\ConverterFactories\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\PhpDocParser\Lexer\Lexer;
-use PHPStan\PhpDocParser\Parser\ConstExprParser;
-use PHPStan\PhpDocParser\Parser\TypeParser as PHPStanTypeParser;
-use PHPStan\PhpDocParser\Parser\TokenIterator;
-use Unicon\Unicon\Constraints\ComparingConstraint;
-use Unicon\Unicon\Constraints\FalseConstraint;
-use Unicon\Unicon\Constraints\TrueConstraint;
 use Unicon\Unicon\ConversionSettings;
+use Unicon\Unicon\ConverterFactories\GivenClassConverterFactory;
 use Unicon\Unicon\Converters\AbstractConverter;
 use Unicon\Unicon\Converters\ArrayConverter;
 use Unicon\Unicon\Converters\BooleanConverter;
 use Unicon\Unicon\Converters\CallableConverter;
-use Unicon\Unicon\Converters\ConstraintConverter;
 use Unicon\Unicon\Converters\FloatConverter;
 use Unicon\Unicon\Converters\IntegerConverter;
 use Unicon\Unicon\Converters\IterableConverter;
@@ -34,31 +26,30 @@ class IdentifierConverterFactory
     public static function create(
         IdentifierTypeNode $phpstanType,
         ConversionSettings $settings,
-        string $phpDocType,
         string $selfClass = null
     ): AbstractConverter {
         return match($phpstanType->name) {
-            'int', 'integer' => new IntegerConverter($settings),
-            'string' => new StringConverter($settings),
-            'bool', 'boolean' => new BooleanConverter($settings),
-            'true' => new BooleanConverter($settings, always: true),
-            'false' => new BooleanConverter($settings, always: false),
-            'null' => new NullConverter($settings),
-            'float', 'double' => new FloatConverter($settings),
+            'int', 'integer' => new IntegerConverter($settings, $phpstanType->name),
+            'string' => new StringConverter($settings, $phpstanType->name),
+            'bool', 'boolean' => new BooleanConverter($settings, $phpstanType->name),
+            'true' => new BooleanConverter($settings, $phpstanType->name, always: true),
+            'false' => new BooleanConverter($settings, $phpstanType->name, always: false),
+            'null' => new NullConverter($settings, $phpstanType->name),
+            'float', 'double' => new FloatConverter($settings, $phpstanType->name),
             'scalar' => new ScalarConverter($settings),
-            'array' => new ArrayConverter($settings),
-            'iterable' => new IterableConverter($settings),
-            'callable' => new CallableConverter($settings),
-            'resource' => new ResourceConverter($settings),
+            'array' => new ArrayConverter($settings, $phpstanType->name),
+            'iterable' => new IterableConverter($settings, $phpstanType->name),
+            'callable' => new CallableConverter($settings, $phpstanType->name),
+            'resource' => new ResourceConverter($settings, $phpstanType->name),
             'void' => new VoidConverter($settings),
-            'object' => new ObjectConverter($settings),
-            'mixed' => new MixedConverter($settings),
-            'positive-int' => new IntegerConverter($settings, min: 1),
-            'negative-int' => new IntegerConverter($settings, max: -1),
-            'non-positive-int' => new IntegerConverter($settings, max: 0),
-            'non-negative-int' => new IntegerConverter($settings, min: 0),
-            'non-zero-int' => new IntegerConverter($settings, nonZero: true),
-            default => new UnsupportedConverter($settings)
+            'object' => new ObjectConverter($settings, $phpstanType->name),
+            'mixed' => new MixedConverter($settings, $phpstanType->name),
+            'positive-int' => new IntegerConverter($settings, $phpstanType->name, min: 1),
+            'negative-int' => new IntegerConverter($settings, $phpstanType->name, max: -1),
+            'non-positive-int' => new IntegerConverter($settings, $phpstanType->name, max: 0),
+            'non-negative-int' => new IntegerConverter($settings, $phpstanType->name, min: 0),
+            'non-zero-int' => new IntegerConverter($settings, $phpstanType->name, nonZero: true),
+            default => GivenClassConverterFactory::create($settings, $phpstanType->name, $selfClass)
         };
     }
 }

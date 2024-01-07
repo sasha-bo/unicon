@@ -15,45 +15,41 @@ class UnsupportedConverter extends AbstractConverter
 {
     /**
      * @param mixed $source
-     * @param string $type
      * @param array<string|int> $path
      * @return UnsupportedError
      */
-    public function tryStrictMatch(mixed $source, string $type, array $path): UnsupportedError
+    public function tryStrictMatch(mixed $source, array $path): UnsupportedError
     {
-        return new UnsupportedError($source, $type, $path);
+        return new UnsupportedError($source, $this->type, $path);
     }
 
     /**
      * @param mixed $source
-     * @param string $type
      * @param array<string|int> $path
      * @return UnsupportedError
      */
-    protected function convertGently(mixed $source, string $type, array $path): UnsupportedError
+    protected function convertGently(mixed $source, array $path): UnsupportedError
     {
-        return new UnsupportedError($source, $type, $path);
+        return new UnsupportedError($source, $this->type, $path);
     }
 
     /**
      * @param mixed $source
-     * @param string $type
      * @param array<string|int> $path
      * @return UnsupportedError
      */
-    protected function convertHumanly(mixed $source, string $type, array $path): UnsupportedError
+    protected function convertHumanly(mixed $source, array $path): UnsupportedError
     {
-        return new UnsupportedError($source, $type, $path);
+        return new UnsupportedError($source, $this->type, $path);
     }
 
     /**
      * @param mixed $source
-     * @param string $type
      * @param array<string|int> $path
      * @return UnsupportedError
      */
-    protected function convertForcibly(mixed $source, string $type, array $path): UnsupportedError
+    protected function convertForcibly(mixed $source, array $path): UnsupportedError
     {
-        return new UnsupportedError($source, $type, $path);
+        return new UnsupportedError($source, $this->type, $path);
     }
 }

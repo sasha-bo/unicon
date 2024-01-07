@@ -44,7 +44,6 @@ class ConverterFactory
             $phpstanType instanceof IdentifierTypeNode => IdentifierConverterFactory::create(
                 $phpstanType,
                 $settings,
-                $phpDocType,
                 $selfClass
             ),
             $phpstanType instanceof UnionTypeNode => UnionConverterFactory::create(
@@ -65,7 +64,7 @@ class ConverterFactory
                 $phpDocType,
                 $selfClass
             ),
-            default => new UnsupportedConverter($settings)
+            default => new UnsupportedConverter($settings, $phpDocType)
         };
     }
 }

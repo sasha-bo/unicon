@@ -8,21 +8,19 @@ class StdClassConverter extends AbstractConverter
 {
     /**
      * @param mixed $source
-     * @param string $type
      * @param array<string|int> $path
      * @return ConversionValue|null
      */
-    public function tryStrictMatch(mixed $source, string $type, array $path): ?ConversionValue
+    public function tryStrictMatch(mixed $source, array $path): ?ConversionValue
     {
         return $source instanceof \stdClass ? new ConversionValue($source) : null;
     }
     /**
      * @param mixed $source
-     * @param string $type
      * @param array<string|int> $path
      * @return ?ConversionValue
      */
-    protected function convertGently(mixed $source, string $type, array $path): ?ConversionValue
+    protected function convertGently(mixed $source, array $path): ?ConversionValue
     {
         if (is_array($source)) {
             return new ConversionValue(self::fromArray($source));

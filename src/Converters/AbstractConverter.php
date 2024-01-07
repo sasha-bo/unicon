@@ -10,78 +10,73 @@ use Unicon\Unicon\Errors\DefaultError;
 abstract class AbstractConverter
 {
     public function __construct(
-        protected readonly ConversionSettings $settings
+        protected readonly ConversionSettings $settings,
+        protected string $type
     ) {
     }
 
     /**
      * @param mixed $source
-     * @param string $type
      * @param array<string|int> $path
      * @return ConversionValue|AbstractError
      */
-    final public function convert(mixed $source, string $type, array $path = []): ConversionValue|AbstractError
+    final public function convert(mixed $source, array $path = []): ConversionValue|AbstractError
     {
-        return $this->tryStrictMatch($source, $type, $path)
-            ?? $this->convertGently($source, $type, $path)
-            ?? ($this->settings->isHumanConversionAllowed() ? $this->convertHumanly($source, $type, $path) : null)
-            ?? ($this->settings->isForcedConversionAllowed() ? $this->convertForcibly($source, $type, $path) : null)
-            ?? $this->createError($source, $type, $path)
+        return $this->tryStrictMatch($source, $path)
+            ?? $this->convertGently($source, $path)
+            ?? ($this->settings->isHumanConversionAllowed() ? $this->convertHumanly($source, $path) : null)
+            ?? ($this->settings->isForcedConversionAllowed() ? $this->convertForcibly($source, $path) : null)
+            ?? $this->createError($source, $path)
         ;
     }
 
     /**
      * @param mixed $source
-     * @param string $type
      * @param array<string|int> $path
      * @return ConversionValue|AbstractError|null
      */
-    protected function tryStrictMatch(mixed $source, string $type, array $path): null|ConversionValue|AbstractError
+    protected function tryStrictMatch(mixed $source, array $path): null|ConversionValue|AbstractError
     {
         return null;
     }
 
     /**
      * @param mixed $source
-     * @param string $type
      * @param array<string|int> $path
      * @return ConversionValue|AbstractError|null
      */
-    protected function convertGently(mixed $source, string $type, array $path): null|ConversionValue|AbstractError
+    protected function convertGently(mixed $source, array $path): null|ConversionValue|AbstractError
     {
         return null;
     }
 
     /**
      * @param mixed $source
-     * @param string $type
      * @param array<string|int> $path
      * @return ConversionValue|AbstractError|null
      */
-    protected function convertHumanly(mixed $source, string $type, array $path): null|ConversionValue|AbstractError
+    protected function convertHumanly(mixed $source, array $path): null|ConversionValue|AbstractError
     {
         return null;
     }
 
     /**
      * @param mixed $source
-     * @param string $type
      * @param array<string|int> $path
      * @return ConversionValue|AbstractError|null
      */
-    protected function convertForcibly(mixed $source, string $type, array $path): null|ConversionValue|AbstractError
+    protected function convertForcibly(mixed $source, array $path): null|ConversionValue|AbstractError
     {
         return null;
     }
 
     /**
      * @param mixed $source
-     * @param string $type
      * @param array<string|int> $path
      * @return AbstractError
      */
-    protected function createError(mixed $source, string $type, array $path): AbstractError
+    protected function createError(mixed $source, array $path): AbstractError
     {
-        return new DefaultError($source, $type, $path);
+        return new DefaultError($source, $this->type, $path);
     }
 }

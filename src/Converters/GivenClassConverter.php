@@ -3,10 +3,18 @@
 namespace Unicon\Unicon\Converters;
 
 use Unicon\Unicon\ConversionResult;
+use Unicon\Unicon\ConversionSettings;
 use Unicon\Unicon\ConversionValue;
 
-class ArrayConverter extends AbstractConverter
+class GivenClassConverter extends AbstractConverter
 {
+    public function __construct(
+        ConversionSettings $settings,
+        private string $classFqn
+    ) {
+        parent::__construct($settings, $this->classFqn);
+    }
+
     /**
      * @param mixed $source
      * @param array<string|int> $path

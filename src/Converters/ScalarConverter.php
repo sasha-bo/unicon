@@ -12,37 +12,36 @@ class ScalarConverter extends UnionConverter
     public function __construct(
         protected readonly ConversionSettings $settings
     ) {
-        $this->stringConverter = new StringConverter($this->settings);
+        $this->stringConverter = new StringConverter($this->settings, 'string');
         parent::__construct(
             [
-                new IntegerConverter($this->settings),
-                new FloatConverter($this->settings),
-                new BooleanConverter($this->settings),
+                new IntegerConverter($this->settings, 'int'),
+                new FloatConverter($this->settings, 'float'),
+                new BooleanConverter($this->settings, 'bool'),
                 $this->stringConverter,
             ],
-            $this->settings
+            $this->settings,
+            'scalar'
         );
     }
 
     /**
      * @param mixed $source
-     * @param string $type
      * @param array<string|int> $path
      * @return ConversionValue|null
      */
-    public function tryStrictMatch(mixed $source, string $type, array $path): ?ConversionValue
+    public function tryStrictMatch(mixed $source, array $path): ?ConversionValue
     {
         return is_scalar($source) ? new ConversionValue($source) : null;
     }
 
     /**
      * @param mixed $source
-     * @param string $type
      * @param array<string|int> $path
      * @return ConversionValue|AbstractError|null
      */
-    protected function convertForcibly(mixed $source, string $type, array $path): null|ConversionValue|AbstractError
+    protected function convertForcibly(mixed $source, array $path): null|ConversionValue|AbstractError
     {
-        return $this->stringConverter->convert($source, $type, $path);
+        return $this->stringConverter->convertForcibly($source, $path);
     }
 }

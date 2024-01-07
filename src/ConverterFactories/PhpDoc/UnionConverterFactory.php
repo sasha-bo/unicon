@@ -42,6 +42,6 @@ class UnionConverterFactory
         foreach ($phpstanType->types as $oneOfTypes) {
             $converters[] = ConverterFactory::create($oneOfTypes, $settings, $phpDocType, $selfClass);
         }
-        return new UnionConverter($converters, $settings);
+        return new UnionConverter($converters, $settings, $phpDocType);
     }
 }
