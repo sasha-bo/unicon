@@ -10,13 +10,13 @@ use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Unicon\Unicon\ConversionSettings;
 use Unicon\Unicon\Converters\AbstractConverter;
 use Unicon\Unicon\Converters\UnsupportedConverter;
+use Unicon\Unicon\PhpDocParser;
 
-class ConverterFactory
+class PhpDocConverterFactory
 {
     public static function create(
         TypeNode $phpstanType,
         ConversionSettings $settings,
-        string $phpDocType,
         string $selfClass = null
     ): AbstractConverter {
         return match (true) {
@@ -28,22 +28,22 @@ class ConverterFactory
             $phpstanType instanceof UnionTypeNode => UnionConverterFactory::create(
                 $phpstanType,
                 $settings,
-                $phpDocType,
+                PhpDocParser::printType($phpstanType),
                 $selfClass
             ),
             $phpstanType instanceof NullableTypeNode => NullableConverterFactory::create(
                 $phpstanType,
                 $settings,
-                $phpDocType,
+                PhpDocParser::printType($phpstanType),
                 $selfClass
             ),
             $phpstanType instanceof GenericTypeNode => GenericConverterFactory::create(
                 $phpstanType,
                 $settings,
-                $phpDocType,
+                PhpDocParser::printType($phpstanType),
                 $selfClass
             ),
-            default => new UnsupportedConverter($settings, $phpDocType)
+            default => new UnsupportedConverter($settings, PhpDocParser::printType($phpstanType))
         };
     }
 }

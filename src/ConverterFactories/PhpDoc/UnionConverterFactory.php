@@ -17,7 +17,7 @@ class UnionConverterFactory
     ): AbstractConverter {
         $converters = [];
         foreach ($phpstanType->types as $oneOfTypes) {
-            $converters[] = ConverterFactory::create($oneOfTypes, $settings, $phpDocType, $selfClass);
+            $converters[] = PhpDocConverterFactory::create($oneOfTypes, $settings, $selfClass);
         }
         return new UnionConverter($converters, $settings, $phpDocType);
     }

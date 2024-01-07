@@ -9,6 +9,7 @@ use Unicon\Unicon\Converters\DateTime\DateTimeImmutableConverter;
 use Unicon\Unicon\Converters\DateTime\DateTimeInterfaceConverter;
 use Unicon\Unicon\Converters\GivenClassConverter;
 use Unicon\Unicon\Converters\StdClassConverter;
+use Unicon\Unicon\Exceptions\ClassDoesNotExistException;
 
 class GivenClassConverterFactory
 {
@@ -37,7 +38,15 @@ class GivenClassConverterFactory
                 }
                 self::$converters[$settingsId][$classFqn] = $converter;
             } else {
-                self::$converters[$settingsId][$classFqn] = new GivenClassConverter($settings, $classFqn);
+                if (!class_exists($classFqn, true)) {
+                    throw new ClassDoesNotExistException($classFqn);
+                }
+                $reflection = new \ReflectionClass($classFqn);
+                // TODO: create enum
+                if ($reflection->isEnum()) {
+                    throw new \Exception($reflection->name.' is enum');
+                }
+                self::$converters[$settingsId][$classFqn] = new GivenClassConverter($settings, $reflection);
             }
         }
 
