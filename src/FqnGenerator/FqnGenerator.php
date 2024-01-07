@@ -15,6 +15,9 @@ class FqnGenerator implements FqnGeneratorInterface
             }
             return $contextClass;
         }
+        if (class_exists('\\'.$class)) {
+            return '\\'.$class;
+        }
         return $this->getNamespace($contextClass).'\\'.$class;
     }
 

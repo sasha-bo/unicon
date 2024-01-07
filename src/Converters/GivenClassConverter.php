@@ -38,7 +38,7 @@ class GivenClassConverter extends AbstractConverter
         private \ReflectionClass $reflection
     ) {
         parent::__construct($settings, $reflection->name);
-        $this->arrayConverter = ConverterFactory::create('array', $this->settings, '/'.$this->reflection->name);
+        $this->arrayConverter = ConverterFactory::create('array', $this->settings, '\\'.$this->reflection->name);
         // Constructor @param attributes
         $constructorPhpDoc = $this->reflection->getConstructor()?->getDocComment();
         if (is_string($constructorPhpDoc)) {
@@ -47,7 +47,7 @@ class GivenClassConverter extends AbstractConverter
                     $this->propertiesConverters[$name] = PhpDocConverterFactory::create(
                         $typeNode,
                         $this->settings,
-                        '/'.$this->reflection->name
+                        '\\'.$this->reflection->name
                     );
                 }
             }
@@ -58,7 +58,7 @@ class GivenClassConverter extends AbstractConverter
                 $this->propertiesConverters[$parameter->name] = TypeConverterFactory::create(
                     $parameter->getType(),
                     $this->settings,
-                    '/'.$this->reflection->name
+                    '\\'.$this->reflection->name
                 );
             }
             if ($parameter->isDefaultValueAvailable()) {
@@ -78,7 +78,7 @@ class GivenClassConverter extends AbstractConverter
                         $this->propertiesConverters[$property->name] = PhpDocConverterFactory::create(
                             $typeNode,
                             $this->settings,
-                            '/'.$this->reflection->name
+                            '\\'.$this->reflection->name
                         );
                     }
                 }
@@ -86,7 +86,7 @@ class GivenClassConverter extends AbstractConverter
                     $this->propertiesConverters[$property->name] = TypeConverterFactory::create(
                         $property->getType(),
                         $this->settings,
-                        '/' . $this->reflection->name
+                        '\\'.$this->reflection->name
                     );
                 }
             }
