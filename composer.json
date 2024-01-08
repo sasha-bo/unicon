@@ -1,7 +1,7 @@
 {
     "name": "unicon/unicon",
-    "version": "1.0",
-    "description": "Universal data convertor, mostly used for array to object mapping. Understands PhpDoc attributes.",
+    "version": "0.9",
+    "description": "Universal PHP variable converter. The main feature is converting arrays to an object of given class. In this case, Unicon follows PhpDoc annotations, works recursively to create the object's properties.",
     "type": "library",
     "license": "GPL-2.0-only",
     "autoload": {
