@@ -49,7 +49,6 @@ $result = $converter->convert([
 ]);
 ```
 
-```$converter->convert(mixed $source)```
 <details>
 <summary>Result:</summary>
 
