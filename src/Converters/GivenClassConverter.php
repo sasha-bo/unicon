@@ -17,6 +17,7 @@ use Unicon\Unicon\PhpDocParser;
 
 class GivenClassConverter extends AbstractConverter
 {
+    private bool $inited = false;
     private AbstractConverter $arrayConverter;
 
     /** @var array<AbstractConverter> */
@@ -38,6 +39,13 @@ class GivenClassConverter extends AbstractConverter
         private \ReflectionClass $reflection
     ) {
         parent::__construct($settings, $reflection->name);
+    }
+
+    private function init(): void
+    {
+        if ($this->inited) {
+            return;
+        }
         $this->arrayConverter = ConverterFactory::create('array', $this->settings, '\\'.$this->reflection->name);
         // Constructor @param attributes
         $constructorPhpDoc = $this->reflection->getConstructor()?->getDocComment();
@@ -91,6 +99,7 @@ class GivenClassConverter extends AbstractConverter
                 }
             }
         }
+        $this->inited = true;
     }
 
     /**
@@ -123,6 +132,7 @@ class GivenClassConverter extends AbstractConverter
         array $source,
         array $path
     ): ConversionValue|AbstractError {
+        $this->init();
         $restOfSourceValues = $source;
         // Constructor parameters
         $constructorParameters = [];
@@ -197,6 +207,7 @@ class GivenClassConverter extends AbstractConverter
         object $source,
         array $path
     ): ConversionValue|AbstractError {
+        $this->init();
         $arrayResult = $this->arrayConverter->convert($source);
         if ($arrayResult instanceof ConversionValue) {
             /** @var array<mixed> $array */

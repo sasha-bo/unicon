@@ -5,12 +5,14 @@ use Unicon\Unicon\ConversionValue;
 use Unicon\Unicon\ConverterFactory;
 use Unicon\Unicon\Errors\DynamicPropertyError;
 use Unicon\Unicon\TestClasses\ClassWithObjectProperty;
+use Unicon\Unicon\TestClasses\RecursiveClass;
 use Unicon\Unicon\TestClasses\SimpleClass;
 use Unicon\Unicon\TestClasses\SimpleClassWithDynamicProperties;
 
 include_once(__DIR__ . '/classes/SimpleClass.php');
 include_once(__DIR__ . '/classes/SimpleClassWithDynamicProperties.php');
 include_once(__DIR__ . '/classes/ClassWithObjectProperty.php');
+include_once(__DIR__ . '/classes/RecursiveClass.php');
 
 final class ObjectsTest extends TestCase
 {
@@ -120,5 +122,38 @@ final class ObjectsTest extends TestCase
         $this->assertInstanceOf(ClassWithObjectProperty::class, $result->value);
         $this->assertSame('ppp', $result->value->stringProperty);
         $this->assertSame(null, $result->value->simpleObject);
+    }
+
+    public function testRecursiveProperties(): void
+    {
+        $converter = ConverterFactory::create(RecursiveClass::class);
+        $result = $converter->convert([
+            'namedInstance' => [
+                'namedInstance' => [
+                    'namedInstance' => ['namedInstance' => null, 'selfInstance' => null],
+                    'selfInstance' => null
+                ],
+                'selfInstance' => ['namedInstance' => null, 'selfInstance' => null],
+            ],
+            'selfInstance' => [
+                'namedInstance' => [
+                    'namedInstance' => null,
+                    'selfInstance' => ['namedInstance' => null, 'selfInstance' => null]
+                ],
+                'selfInstance' => ['namedInstance' => null, 'selfInstance' => null],
+            ]
+        ]);
+        $this->assertInstanceOf(ConversionValue::class, $result);
+        $this->assertInstanceOf(RecursiveClass::class, $result->value);
+        $this->assertInstanceOf(RecursiveClass::class, $result->value->namedInstance);
+        $this->assertInstanceOf(RecursiveClass::class, $result->value->selfInstance);
+        $this->assertInstanceOf(RecursiveClass::class, $result->value->namedInstance->namedInstance);
+        $this->assertInstanceOf(RecursiveClass::class, $result->value->namedInstance->selfInstance);
+        $this->assertInstanceOf(RecursiveClass::class, $result->value->selfInstance->namedInstance);
+        $this->assertInstanceOf(RecursiveClass::class, $result->value->selfInstance->selfInstance);
+        $this->assertInstanceOf(RecursiveClass::class, $result->value->namedInstance->namedInstance->namedInstance);
+        $this->assertSame(null, $result->value->namedInstance->namedInstance->selfInstance);
+        $this->assertInstanceOf(RecursiveClass::class, $result->value->selfInstance->namedInstance->selfInstance);
+        $this->assertSame(null, $result->value->selfInstance->namedInstance->namedInstance);
     }
 }
