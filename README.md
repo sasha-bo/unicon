@@ -50,8 +50,8 @@ $result = $converter->convert([
 ```
 
 ```$converter->convert(mixed $source)```
-
-Result:
+<details>
+<summary>Result:</summary>
 
 ```php
 object(Unicon\Unicon\ConversionValue)#11 (1) {
@@ -75,3 +75,43 @@ object(Unicon\Unicon\ConversionValue)#11 (1) {
   }
 }
 ```
+</details>
+
+## Settings
+
+ConverterFactory::create has the second optional parameter of
+ConversionSettings class:
+
+```php
+ConverterFactory::create(
+    string $type = 'mixed', 
+    ConversionSettings $settings = new ConversionSettings()
+)
+```
+
+You can create your ConversionSettings and configure it for your needs:
+
+```php
+$settings = new ConversionSettings();
+$settings->allowHumanConversion();
+$settings->allowForcedConversion();
+$settings->setStringToDateFormats(['Y-m-d H:i:s']);
+$settings->setDateToStringFormat('Y-m-d H:i:s');
+```
+
+## Conversion priorities
+
+1. Strict match (1 for int)
+2. Gentle casting ('1' for int)
+3. Forced casting if turned on (1.1 to 1 for int)
+
+This affect the conversion if the property has few conversion options. For
+example:
+
+|                     | ```null``` | ```0```   | ```'0'```   |
+|-------------------------|------|-----|-------|
+| ```int```               | ```0 ```  | ```0```   | ```0``` |
+| ```?int```              | ```null``` | ```0```   | ```0```    |
+| ```null\|int\|string``` | ```null``` | ```0```   | ```'0'```   |
+| ?string                 | ```null``` | ```'0'``` | ```'0'```   |
+| string                  |  ```''```    | ```'0'```  | ```'0'```   |
