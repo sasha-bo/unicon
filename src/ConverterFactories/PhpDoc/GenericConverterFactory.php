@@ -8,8 +8,9 @@ use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use Unicon\Unicon\ConversionSettings;
 use Unicon\Unicon\Converters\AbstractConverter;
+use Unicon\Unicon\Converters\ArrayConverter;
 use Unicon\Unicon\Converters\IntegerConverter;
-use Unicon\Unicon\Converters\UnsupportedConverter;
+use Unicon\Unicon\Exceptions\UnknownTypehintException;
 
 class GenericConverterFactory
 {
@@ -22,7 +23,11 @@ class GenericConverterFactory
         $mainType = $phpstanType->type;
         return match($mainType->name) {
             'int', 'integer' => self::createInteger($phpstanType->genericTypes, $phpDocType, $settings),
-            default => new UnsupportedConverter($settings, $phpDocType)
+            'array' => self::createArray($phpstanType->genericTypes, $phpDocType, $settings, $selfClass, false),
+            'non-empty-array' => self::createArray($phpstanType->genericTypes, $phpDocType, $settings, $selfClass, true),
+            'list' => self::createList($phpstanType->genericTypes, $phpDocType, $settings, $selfClass, false),
+            'non-empty-list' => self::createList($phpstanType->genericTypes, $phpDocType, $settings, $selfClass, true),
+            default => throw new UnknownTypehintException($phpDocType)
         };
     }
 
@@ -49,5 +54,76 @@ class GenericConverterFactory
         }
 
         return new IntegerConverter($settings, $phpDocType, ...$parameters);
+    }
+
+    /**
+     * @param array<TypeNode> $genericTypes
+     * @param string $phpDocType
+     * @param ConversionSettings $settings
+     * @param string $selfClass
+     * @param bool $notEmpty
+     * @return AbstractConverter
+     * @throws UnknownTypehintException
+     */
+    private static function createArray(array $genericTypes, string $phpDocType, ConversionSettings $settings, ?string $selfClass, bool $notEmpty): AbstractConverter
+    {
+        if (count($genericTypes) == 0) {
+            return new ArrayConverter($settings, $phpDocType);
+        } elseif (count($genericTypes) == 1) {
+            return new ArrayConverter(
+                $settings,
+                $phpDocType,
+                null,
+                PhpDocConverterFactory::create(
+                    $genericTypes[0], $settings, $selfClass
+                ),
+                false,
+                $notEmpty
+            );
+        } elseif (count($genericTypes) == 2) {
+            return new ArrayConverter(
+                $settings,
+                $phpDocType,
+                PhpDocConverterFactory::create(
+                    $genericTypes[0], $settings, $selfClass
+                ),
+                PhpDocConverterFactory::create(
+                    $genericTypes[1], $settings, $selfClass
+                ),
+                false,
+                $notEmpty
+            );
+        }
+
+        throw new UnknownTypehintException($phpDocType);
+    }
+
+    /**
+     * @param array<TypeNode> $genericTypes
+     * @param string $phpDocType
+     * @param ConversionSettings $settings
+     * @param string|null $selfClass
+     * @param bool $notEmpty
+     * @return AbstractConverter
+     * @throws UnknownTypehintException
+     */
+    private static function createList(array $genericTypes, string $phpDocType, ConversionSettings $settings, ?string $selfClass, bool $notEmpty): AbstractConverter
+    {
+        if (count($genericTypes) == 0) {
+            return new ArrayConverter($settings, $phpDocType, null, null, true);
+        } elseif (count($genericTypes) == 1) {
+            return new ArrayConverter(
+                $settings,
+                $phpDocType,
+                null,
+                PhpDocConverterFactory::create(
+                    $genericTypes[0], $settings, $selfClass
+                ),
+                true,
+                $notEmpty
+            );
+        }
+
+        throw new UnknownTypehintException($phpDocType);
     }
 }

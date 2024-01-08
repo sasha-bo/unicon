@@ -3,16 +3,25 @@
 namespace Unicon\Unicon\Converters;
 
 use Unicon\Unicon\ConversionValue;
+use Unicon\Unicon\Errors\AbstractError;
+use Unicon\Unicon\Errors\EmptyArrayError;
 
-class IterableConverter extends AbstractConverter
+class IterableConverter extends ArrayConverter
 {
-    /**
-     * @param mixed $source
-     * @param array<string|int> $path
-     * @return ConversionValue|null
-     */
-    public function tryStrictMatch(mixed $source, array $path): ?ConversionValue
+    public function tryStrictMatch(mixed $source, array $path): null|ConversionValue|AbstractError
     {
-        return is_iterable($source) ? new ConversionValue($source) : null;
+        if (is_iterable($source)) {
+            if ($this->notEmpty && !$this->checkIsNotEmpty($source)) {
+                return new EmptyArrayError($source, $this->type, $path);
+            }
+            if (
+                (!$this->isList || $this->checkIsList($source))
+                && $this->checkTypes($source)
+            ) {
+                return new ConversionValue($source);
+            }
+        }
+
+        return null;
     }
 }

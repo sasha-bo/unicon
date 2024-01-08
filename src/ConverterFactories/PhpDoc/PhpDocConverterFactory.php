@@ -2,6 +2,7 @@
 
 namespace Unicon\Unicon\ConverterFactories\PhpDoc;
 
+use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
@@ -9,7 +10,8 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Unicon\Unicon\ConversionSettings;
 use Unicon\Unicon\Converters\AbstractConverter;
-use Unicon\Unicon\Converters\UnsupportedConverter;
+use Unicon\Unicon\Converters\ArrayConverter;
+use Unicon\Unicon\Exceptions\UnknownTypehintException;
 use Unicon\Unicon\PhpDocParser;
 
 class PhpDocConverterFactory
@@ -43,7 +45,13 @@ class PhpDocConverterFactory
                 PhpDocParser::printType($phpstanType),
                 $selfClass
             ),
-            default => new UnsupportedConverter($settings, PhpDocParser::printType($phpstanType))
+            $phpstanType instanceof ArrayTypeNode => new ArrayConverter(
+                $settings,
+                PhpDocParser::printType($phpstanType),
+                null,
+                self::create($phpstanType->type, $settings, $selfClass)
+            ),
+            default => throw new UnknownTypehintException(PhpDocParser::printType($phpstanType))
         };
     }
 }
