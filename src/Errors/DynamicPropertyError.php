@@ -2,7 +2,7 @@
 
 namespace Unicon\Unicon\Errors;
 
-readonly class DynamicPropertyError extends AbstractError
+class DynamicPropertyError extends AbstractError
 {
     /**
      * @param array<mixed> $source

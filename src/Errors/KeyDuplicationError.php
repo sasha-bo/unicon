@@ -2,7 +2,7 @@
 
 namespace Unicon\Unicon\Errors;
 
-readonly class KeyDuplicationError extends AbstractError
+class KeyDuplicationError extends AbstractError
 {
     public function __construct(mixed $value, string $typeHint, array $path, public mixed $key)
     {

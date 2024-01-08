@@ -2,7 +2,7 @@
 
 namespace Unicon\Unicon\Errors;
 
-readonly class TrueFalseError extends AbstractError
+class TrueFalseError extends AbstractError
 {
     public function __construct(
         mixed $value,

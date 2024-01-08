@@ -2,7 +2,7 @@
 
 namespace Unicon\Unicon;
 
-readonly class ConversionValue
+class ConversionValue
 {
     public function __construct(
         public mixed $value,

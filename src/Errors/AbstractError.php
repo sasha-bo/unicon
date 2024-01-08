@@ -2,7 +2,7 @@
 
 namespace Unicon\Unicon\Errors;
 
-abstract readonly class AbstractError
+abstract class AbstractError
 {
     /**
      * @param mixed $value

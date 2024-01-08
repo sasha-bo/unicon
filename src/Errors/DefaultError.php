@@ -2,6 +2,6 @@
 
 namespace Unicon\Unicon\Errors;
 
-readonly class DefaultError extends AbstractError
+class DefaultError extends AbstractError
 {
 }

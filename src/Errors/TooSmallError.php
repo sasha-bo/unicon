@@ -2,7 +2,7 @@
 
 namespace Unicon\Unicon\Errors;
 
-readonly class TooSmallError extends AbstractError
+class TooSmallError extends AbstractError
 {
     /**
      * @param mixed $value

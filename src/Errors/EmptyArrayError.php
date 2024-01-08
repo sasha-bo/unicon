@@ -2,6 +2,6 @@
 
 namespace Unicon\Unicon\Errors;
 
-readonly class EmptyArrayError extends AbstractError
+class EmptyArrayError extends AbstractError
 {
 }

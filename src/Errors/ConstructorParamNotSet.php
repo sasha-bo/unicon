@@ -2,7 +2,7 @@
 
 namespace Unicon\Unicon\Errors;
 
-readonly class ConstructorParamNotSet extends AbstractError
+class ConstructorParamNotSet extends AbstractError
 {
     /**
      * @param array<mixed> $source

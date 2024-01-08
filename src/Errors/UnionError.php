@@ -2,7 +2,7 @@
 
 namespace Unicon\Unicon\Errors;
 
-readonly class UnionError extends AbstractError
+class UnionError extends AbstractError
 {
     /**
      * @param mixed $value
