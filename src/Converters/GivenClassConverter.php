@@ -12,6 +12,7 @@ use Unicon\Unicon\Errors\AbstractError;
 use Unicon\Unicon\Errors\ConstructorParamNotSet;
 use Unicon\Unicon\Errors\DefaultError;
 use Unicon\Unicon\Errors\DynamicPropertyError;
+use Unicon\Unicon\Errors\MissedPropertyError;
 use Unicon\Unicon\Exceptions\IntersectionException;
 use Unicon\Unicon\PhpDocParser;
 
@@ -189,13 +190,13 @@ class GivenClassConverter extends AbstractConverter
                     }
                 } else {
                     foreach ($restOfSourceValues as $name => $value) {
-                        return new DynamicPropertyError($source, $this->reflection->name, $name, $path);
+                        return new DynamicPropertyError($source, $this->reflection->name, $value, [...$path, $name]);
                     }
                 }
             }
         }
         // Return
-        return new ConversionValue($object);
+        return $this->validate($source, $object, $path);
     }
 
     /**
@@ -216,5 +217,28 @@ class GivenClassConverter extends AbstractConverter
         } else {
             return $arrayResult;
         }
+    }
+
+    /**
+     * @param mixed $source
+     * @param object $object
+     * @param array<string|int> $path
+     * @return ConversionValue|AbstractError
+     */
+    private function validate(mixed $source, object $object, array $path): ConversionValue|AbstractError
+    {
+        if ($this->settings->propertiesMustBeInitialized()) {
+            foreach ($this->reflection->getProperties() as $property) {
+                if (!$property->isStatic() && !$property->isInitialized($object)) {
+                    if ($property->getType()?->allowsNull() ?? true) {
+                        $property->setValue($object, null);
+                    } else {
+                        return new MissedPropertyError($source, $this->type, [...$path, $property->getName()]);
+                    }
+                }
+            }
+        }
+
+        return new ConversionValue($object);
     }
 }

@@ -78,7 +78,7 @@ class IntegerConverter extends AbstractConverter
         if (!is_null($this->max) && $value > $this->max) {
             return new TooLargeError($source, $this->type, $path, $this->max, true);
         }
-        if (!is_null($this->min) && $value > $this->min) {
+        if (!is_null($this->min) && $value < $this->min) {
             return new TooSmallError($source, $this->type, $path, $this->min, true);
         }
         if ($this->nonZero && $value == 0) {

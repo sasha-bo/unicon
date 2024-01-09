@@ -9,6 +9,7 @@ class ConversionSettings
 {
     private bool $humanConversionAllowed = false;
     private bool $forcedConversionAllowed = false;
+    private bool $propertiesMustBeInitialized = false;
     private string $dateToStringFormat = 'Y-m-d H:i:s';
 
     /**
@@ -42,6 +43,11 @@ class ConversionSettings
     public function isForcedConversionAllowed(): bool
     {
         return $this->forcedConversionAllowed;
+    }
+
+    public function propertiesMustBeInitialized(): bool
+    {
+        return $this->propertiesMustBeInitialized;
     }
 
     public function getDateToStringFormat(): string
@@ -80,6 +86,13 @@ class ConversionSettings
     public function allowForcedConversion(bool $value = true): static
     {
         $this->forcedConversionAllowed = $value;
+
+        return $this;
+    }
+
+    public function checkIfAllPropertiesAreInitialized(bool $value = true): static
+    {
+        $this->propertiesMustBeInitialized = $value;
 
         return $this;
     }
