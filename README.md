@@ -4,6 +4,9 @@ Unicon is universal PHP variable converter. The main feature is converting
 arrays to an object of given class. In this case, Unicon follows PhpDoc 
 annotations, works recursively to create the object's properties.
 
+See [unicon/yaml](https://packagist.org/packages/unicon/yaml) - one of 
+possible implementations. It converts YAML file to an object of given class. 
+
 ## Installation
 
 ```composer require unicon/unicon```
@@ -96,6 +99,8 @@ $settings->allowHumanConversion();
 $settings->allowForcedConversion();
 $settings->setStringToDateFormats(['Y-m-d H:i:s']);
 $settings->setDateToStringFormat('Y-m-d H:i:s');
+$settings->allowNullToEmptyArrayConversion();
+$settings->checkIfAllPropertiesAreInitialized();
 ```
 
 ## Conversion priorities
