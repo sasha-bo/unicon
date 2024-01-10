@@ -45,7 +45,14 @@ class ArrayConverter extends AbstractConverter
 
     public function convertGently(mixed $source, array $path): null|ConversionValue|AbstractError
     {
-        if (is_iterable($source)) {
+        if (is_null($source)) {
+            if ($this->settings->isNullToEmptyArrayConversionAllowed()) {
+                if ($this->notEmpty) {
+                    return new EmptyArrayError($source, $this->type, $path);
+                }
+                return new ConversionValue([]);
+            }
+        } elseif (is_iterable($source)) {
             if ($this->notEmpty && !$this->checkIsNotEmpty($source)) {
                 return new EmptyArrayError($source, $this->type, $path);
             }

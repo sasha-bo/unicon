@@ -10,6 +10,7 @@ class ConversionSettings
     private bool $humanConversionAllowed = false;
     private bool $forcedConversionAllowed = false;
     private bool $propertiesMustBeInitialized = false;
+    private bool $nullToEmptyArrayConversionAllowed = false;
     private string $dateToStringFormat = 'Y-m-d H:i:s';
 
     /**
@@ -43,6 +44,11 @@ class ConversionSettings
     public function isForcedConversionAllowed(): bool
     {
         return $this->forcedConversionAllowed;
+    }
+
+    public function isNullToEmptyArrayConversionAllowed(): bool
+    {
+        return $this->nullToEmptyArrayConversionAllowed;
     }
 
     public function propertiesMustBeInitialized(): bool
@@ -86,6 +92,13 @@ class ConversionSettings
     public function allowForcedConversion(bool $value = true): static
     {
         $this->forcedConversionAllowed = $value;
+
+        return $this;
+    }
+
+    public function allowNullToEmptyArrayConversion(bool $value = true): static
+    {
+        $this->nullToEmptyArrayConversionAllowed = $value;
 
         return $this;
     }
